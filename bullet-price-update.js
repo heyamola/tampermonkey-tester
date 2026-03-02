@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bullet Auto Buyer Advanced
 // @namespace    https://omerta-bullet/
-// @version      2.1
+// @version      2.11
 // @description  Bullet factory smart auto buyer (menu + clicklimit backoff + cooldown)
 // @match        *://omerta.com.tr/*
 // @match        *://www.omerta.com.tr/*
@@ -20,6 +20,7 @@
      SETTINGS (Persistent)
   ================================ */
 
+  let isRunning = GM_getValue("Run", false);
   let autoBuy = GM_getValue("autoBuy", false);
   let targetPrice = GM_getValue("targetPrice", 700);
   let intervalSec = GM_getValue("intervalSec", 3); // 1-60 arası
@@ -32,6 +33,16 @@
   ================================ */
 
   function buildMenu() {
+    GM_registerMenuCommand(
+      "Run Script: " + (isRunning ? "ON" : "OFF"),
+      () => {
+        isRunning = !isRunning;
+        GM_setValue("Run", isRunning);
+        alert("Script is now " + (isRunning ? "RUNNING" : "STOPPED"));
+        location.reload();
+      }
+    );
+
     GM_registerMenuCommand(
       "Auto Buy: " + (autoBuy ? "ON" : "OFF"),
       () => {
@@ -136,6 +147,11 @@ function clickBulletFactory() {
   ================================ */
 
   async function main() {
+    if (!isRunning) {
+      console.log("Script is OFF. Skipping.");
+      return;
+    }
+
     clickBulletFactory();
 
     const now = Date.now();
