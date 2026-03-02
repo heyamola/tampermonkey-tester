@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bullet Auto Buyer Advanced
 // @namespace    https://omerta-bullet/
-// @version      2.11
+// @version      2.12
 // @description  Bullet factory smart auto buyer (menu + clicklimit backoff + cooldown)
 // @match        *://omerta.com.tr/*
 // @match        *://www.omerta.com.tr/*
