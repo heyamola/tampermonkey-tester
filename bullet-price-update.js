@@ -170,9 +170,11 @@ function clickBulletFactory() {
       return; // burada sleep YOK
     }
 
-    // 2) Cooldown kontrolü (daha önce mermi alınmış / tekrar alınamaz)
+    // 2) Cooldown kontrolü
     if (isOnCooldown()) {
-      console.log("On cooldown. Skipping.");
+      console.warn("Cooldown detected. Turning script OFF.");
+      isRunning = false;
+      GM_setValue("Run", false);
       return;
     }
 
