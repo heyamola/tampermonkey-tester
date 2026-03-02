@@ -142,6 +142,29 @@ function clickBulletFactory() {
     return true;
 }
 
+/* ================= CAPTCHA ================= */
+
+function checkCaptcha() {
+
+    const iframes = document.querySelectorAll('iframe[src*="hcaptcha.com"]');
+    log.debug("Captcha check, iframes:", iframes.length);
+
+    for (const iframe of iframes) {
+        const rect = iframe.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+            State.stopped = true;
+            updateStatus("Captcha Detected — Paused", "red");
+            log.info("Captcha detected, loop paused");
+            return true;
+        }
+    }
+
+    if (!State.stopped)
+        updateStatus("Running", "#0f0");
+
+    return false;
+}
+
   /* ================================
      MAIN FLOW
   ================================ */
@@ -153,6 +176,13 @@ function clickBulletFactory() {
     }
 
     clickBulletFactory();
+
+    if (checkCaptcha()) {
+      // set isRunning to false to prevent further checks until user manually turns it on again
+      isRunning = false;
+      GM_setValue("Run", false);  
+      return;
+    }
 
     const now = Date.now();
 
